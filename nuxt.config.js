@@ -1,7 +1,14 @@
 import colors from 'vuetify/es5/util/colors'
+require('dotenv').config()
+const {API} = process.env
 
 export default {
+  rootDir: './',
   mode: 'spa',
+  env: {
+    SSRURL: process.env.SSRURL || 'http://localhost:3001/cheer/',
+    CHEERFOR_URL: process.env.CHEERFOR_URL || 'http://localhost:3000/',
+  },
   /*
   ** Headers of the page
   */
@@ -15,6 +22,12 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+,
+      {
+        rel: 'stylesheet',
+        href:
+          'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
+      }
     ]
   },
   /*
@@ -30,38 +43,46 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src:'~/plugins/timeago.js' }
-  ],
-  /*
-  ** Nuxt.js dev-modules
-  */
-  buildModules: [
-    '@nuxtjs/vuetify',
+    { src: '~/plugins/timeago.js' },
+    { src: '~/plugins/web3.js' },
+    { src: '~/plugins/twitter.js' }
   ],
   /*
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/vuetify',
+    '@nuxtjs/pwa',
   ],
+  pwa: {
+    workbox: {
+      dev: true,
+    }
+  },
+  manifest: {
+    name: 'cheerfor beta',
+    short_name: 'cheerfor',
+    title: 'cheerfor beta',
+    'og:title': 'cheerfor beta',
+    description: 'cheerfor beta',
+    'og:description': 'cheerfor beta',
+    lang: 'ja',
+    theme_color: '#ffffff',
+    background_color: '#ffffff'
+  },
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module
   */
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
-      themes: {
-        dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
-      }
+      primary: colors.amber.darken2,
+      accent: colors.grey.darken3,
+      secondary: colors.grey.lighten3,
+      info: colors.teal.lighten1,
+      warning: colors.amber.base,
+      error: colors.deepOrange.accent4,
+      success: colors.green.accent3
     }
   },
   /*
@@ -71,7 +92,7 @@ export default {
     /*
     ** You can extend webpack config here
     */
-    extend (config, ctx) {
+    extend(config, ctx) {
     }
   }
 }
